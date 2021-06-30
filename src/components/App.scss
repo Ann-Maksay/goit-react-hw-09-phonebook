@@ -1,0 +1,32 @@
+.App {
+  text-align: center;
+}
+
+.NavItemContainer {
+  margin-right: 10px;
+}
+
+.NavLink {
+  color: black;
+}
+.NavLink--active {
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.MainContainer {
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 20px;
+}
+
+.mainPageTitle {
+  font-weight: 500;
+  font-size: 48px;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.loginFormContainer {
+  width: 500px;
+}
