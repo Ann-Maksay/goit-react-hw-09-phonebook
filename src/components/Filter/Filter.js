@@ -1,6 +1,5 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
+import React, { useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import Form from "react-bootstrap/Form";
 
@@ -8,10 +7,16 @@ import { FilterWrapper } from "./FilterStyled";
 import { changeFilter } from "../../redux/phonebook/phonebook-actions";
 import { getFilter } from "../../redux/phonebook/phonebook-selectors";
 
-const Filter = ({ setFilter, value }) => {
-  const handleChange = (e) => {
-    setFilter(e.target.value);
-  };
+export default function Filter() {
+  const dispatch = useDispatch();
+  const value = useSelector(getFilter);
+
+  const handleChange = useCallback(
+    (e) => {
+      dispatch(changeFilter(e.target.value));
+    },
+    [dispatch]
+  );
 
   return (
     <FilterWrapper>
@@ -27,19 +32,19 @@ const Filter = ({ setFilter, value }) => {
       </Form.Group>
     </FilterWrapper>
   );
-};
+}
 
-Filter.propTypes = {
-  setFilter: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired,
-};
+// Filter.propTypes = {
+//   setFilter: PropTypes.func.isRequired,
+//   value: PropTypes.string.isRequired,
+// };
 
-const mapStateToProps = (state) => ({
-  value: getFilter(state),
-});
+// const mapStateToProps = (state) => ({
+//   value: getFilter(state),
+// });
 
-const mapDispatchToProps = (dispatch) => ({
-  setFilter: (value) => dispatch(changeFilter(value)),
-});
+// const mapDispatchToProps = (dispatch) => ({
+//   setFilter: (value) => dispatch(changeFilter(value)),
+// });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Filter);
+// export default connect(mapStateToProps, mapDispatchToProps)(Filter);

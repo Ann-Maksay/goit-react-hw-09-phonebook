@@ -1,74 +1,78 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { useState, useCallback } from "react";
+import { useDispatch } from "react-redux";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
 import { logIn } from "../../redux/auth/auth-operations";
 
-class LoginForm extends Component {
-  state = {
-    email: "",
-    password: "",
-  };
+export default function LoginForm() {
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  handleInputChange = (e) => {
+  const handleInputChange = (e) => {
     const { value, name } = e.target;
 
-    this.setState({ [name]: value });
+    switch (name) {
+      case "email":
+        setEmail(value);
+        break;
+      case "password":
+        setPassword(value);
+        break;
+
+      default:
+        return null;
+    }
   };
 
-  handleSabmit = (e) => {
-    e.preventDefault();
+  const handleSabmit = useCallback(
+    (e) => {
+      e.preventDefault();
 
-    this.props.onLogin(this.state);
+      dispatch(logIn({ email, password }));
 
-    this.resetForm();
+      resetForm();
+    },
+    [dispatch, email, password]
+  );
+
+  const resetForm = () => {
+    setEmail("");
+    setPassword("");
   };
 
-  resetForm = () => {
-    this.setState({ email: "", password: "" });
-  };
+  return (
+    <div className="MainContainer loginFormContainer">
+      <Form onSubmit={handleSabmit}>
+        <Form.Group controlId="formBasicEmail">
+          <Form.Label>Email address</Form.Label>
+          <Form.Control
+            type="email"
+            placeholder="Enter email"
+            value={email}
+            name="email"
+            onChange={handleInputChange}
+            autoComplete="off"
+          />
+        </Form.Group>
 
-  render() {
-    const { email, password } = this.state;
-    return (
-      <div className="MainContainer loginFormContainer">
-        <Form onSubmit={this.handleSabmit}>
-          <Form.Group controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Enter email"
-              value={email}
-              name="email"
-              onChange={this.handleInputChange}
-              autoComplete="off"
-            />
-          </Form.Group>
+        <Form.Group controlId="formBasicPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Password"
+            value={password}
+            name="password"
+            onChange={handleInputChange}
+            autoComplete="off"
+          />
+        </Form.Group>
 
-          <Form.Group controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              value={password}
-              name="password"
-              onChange={this.handleInputChange}
-              autoComplete="off"
-            />
-          </Form.Group>
-
-          <Button variant="primary" type="submit">
-            Login
-          </Button>
-        </Form>
-      </div>
-    );
-  }
+        <Button variant="primary" type="submit">
+          Login
+        </Button>
+      </Form>
+    </div>
+  );
 }
-
-const mapDipatchToProps = {
-  onLogin: logIn,
-};
-
-export default connect(null, mapDipatchToProps)(LoginForm);

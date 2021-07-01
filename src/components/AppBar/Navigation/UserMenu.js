@@ -1,11 +1,18 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "react-bootstrap/Button";
 
 import { getUserMail } from "../../../redux/auth/auth-selectors";
 import { logOut } from "../../../redux/auth/auth-operations";
 
-const UserMenu = ({ userMail, onLogout }) => {
+export default function UserMenu() {
+  const dispatch = useDispatch();
+  const userMail = useSelector(getUserMail);
+
+  const onLogout = useCallback(() => {
+    dispatch(logOut());
+  }, [dispatch]);
+
   return (
     <>
       <div className="NavItemContainer">
@@ -18,14 +25,14 @@ const UserMenu = ({ userMail, onLogout }) => {
       </div>
     </>
   );
-};
+}
 
-const mapStateToProps = (state) => ({
-  userMail: getUserMail(state),
-});
+// const mapStateToProps = (state) => ({
+//   userMail: getUserMail(state),
+// });
 
-const mapDispatchToProps = {
-  onLogout: logOut,
-};
+// const mapDispatchToProps = {
+//   onLogout: logOut,
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserMenu);
+// export default connect(mapStateToProps, mapDispatchToProps)(UserMenu);

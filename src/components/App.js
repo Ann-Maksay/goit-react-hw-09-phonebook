@@ -1,8 +1,8 @@
 import "./App.scss";
 
-import React, { Suspense, lazy, Component } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import { Switch } from "react-router-dom";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import AppBar from "./AppBar/AppBar";
 import PublicRoute from "./Routes/PublicRoute";
@@ -23,44 +23,49 @@ const LoginPage = lazy(() =>
   import("../pages/LoginPage" /* webpackChunkName: "login-page" */)
 );
 
-class App extends Component {
-  componentDidMount() {
-    this.props.getUser();
-  }
+export default function App() {
+  const dispatch = useDispatch();
 
-  render() {
-    return (
-      <div>
-        <AppBar />
-        <Suspense fallback={<h1>Loading..</h1>}>
-          <Switch>
-            <PublicRoute exact path={routes.home} component={HomePage} />
-            <PrivateRoute
-              path={routes.contacts}
-              component={ContactsPage}
-              redirectTo={routes.login}
-            />
-            <PublicRoute
-              path={routes.register}
-              restricted
-              component={RegisterPage}
-              redirectTo={routes.contacts}
-            />
-            <PublicRoute
-              path={routes.login}
-              restricted
-              component={LoginPage}
-              redirectTo={routes.contacts}
-            />
-          </Switch>
-        </Suspense>
-      </div>
-    );
-  }
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, [dispatch]);
+
+  return (
+    <div>
+      <AppBar />
+      <Suspense fallback={<h1>Loading..</h1>}>
+        <Switch>
+          <PublicRoute exact path={routes.home}>
+            <HomePage />
+          </PublicRoute>
+
+          <PrivateRoute path={routes.contacts} redirectTo={routes.login}>
+            <ContactsPage />
+          </PrivateRoute>
+
+          <PrivateRoute
+            path={routes.register}
+            restricted
+            redirectTo={routes.contacts}
+          >
+            <RegisterPage />
+          </PrivateRoute>
+
+          <PublicRoute
+            path={routes.login}
+            restricted
+            redirectTo={routes.contacts}
+          >
+            <LoginPage />
+          </PublicRoute>
+        </Switch>
+      </Suspense>
+    </div>
+  );
 }
 
-const mapDospatchToProps = {
-  getUser: getCurrentUser,
-};
+// const mapDospatchToProps = {
+//   getUser: getCurrentUser,
+// };
 
-export default connect(null, mapDospatchToProps)(App);
+// export default connect(null, mapDospatchToProps)(App);
