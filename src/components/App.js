@@ -43,13 +43,13 @@ export default function App() {
             <ContactsPage />
           </PrivateRoute>
 
-          <PrivateRoute
+          <PublicRoute
             path={routes.register}
             restricted
             redirectTo={routes.contacts}
           >
             <RegisterPage />
-          </PrivateRoute>
+          </PublicRoute>
 
           <PublicRoute
             path={routes.login}
