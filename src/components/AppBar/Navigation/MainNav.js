@@ -1,13 +1,15 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 
 import { getIsAuthenticated } from "../../../redux/auth/auth-selectors";
 
 import routes from "../../../routes";
 
-const MainNav = ({ isAuth }) => {
+export default function MainNav() {
+  const isAuth = useSelector(getIsAuthenticated);
+
   return (
     <Nav className="mr-auto">
       <div className="NavItemContainer">
@@ -37,10 +39,10 @@ const MainNav = ({ isAuth }) => {
       )}
     </Nav>
   );
-};
+}
 
-const mapStateToProps = (state) => ({
-  isAuth: getIsAuthenticated(state),
-});
+// const mapStateToProps = (state) => ({
+//   isAuth: getIsAuthenticated(state),
+// });
 
-export default connect(mapStateToProps)(MainNav);
+// export default connect(mapStateToProps)(MainNav);
